@@ -1,3 +1,5 @@
+#!/bin/env python3
+
 from datetime import datetime
 from random import random
 from bs4 import BeautifulSoup
@@ -139,7 +141,8 @@ class Crawler:
 def process_arguments():
     parser = argparse.ArgumentParser(description=HELP_TEXT)
     parser.add_argument(
-        "--username", #用户名设置，必填，推荐使用全名，因为是模糊匹配的。
+        "--username",  # 用户名设置，必填，推荐使用全名，因为是模糊匹配的。
+        "-u",
         metavar="Username",
         type=str,
         action="store",
@@ -148,9 +151,10 @@ def process_arguments():
         dest="userName",
     )
     parser.add_argument(
-        "--max-pages", # 爬取的最大页数，越多越卡，因为没开多线程
+        "--max-pages",  # 爬取的最大页数，越多越卡，因为没开多线程
+        "-m",
         metavar="N",
-        default=30, # default 30 不然网友发的太多根本爬不到自己发的都顶掉了
+        default=30,  # default 30 不然网友发的太多根本爬不到自己发的都顶掉了
         type=int,
         action="store",
         required=False,
@@ -158,7 +162,8 @@ def process_arguments():
         dest="maxPages",
     )
     parser.add_argument(
-        "--verbose", # 是否显示详细信息（废话模式）
+        "--verbose",  # 是否显示详细信息（废话模式）
+        "-v",
         default=False,
         action="store_true",
         help="废话模式",
@@ -192,3 +197,5 @@ if __name__ == "__main__":
     except Exception as e:
         print("出错了！")
         print(e)
+    except KeyboardInterrupt:
+        print("取消！")
