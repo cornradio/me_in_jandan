@@ -27,7 +27,12 @@ class Configure:
         self.isVerbose = isVerbose
 
     def __repr__(self) -> str:
-        return f"userName:{self.userName}\nmaxPages:{self.maxPages}\nisVerbose:{self.isVerbose}\n"
+        return f"""
+[当前配置]
+userName:   {self.userName}
+maxPages:   {self.maxPages}
+isVerbose:  {self.isVerbose}
+        """
 
 
 class Crawler:
@@ -124,7 +129,7 @@ class Crawler:
             if not resp.ok:
                 print("Oops! Something went wrong!")
                 continue
-            # if pic or hole
+            # if pic or treehole
             self.results += self.find_post_in_page(
                 url, BeautifulSoup(resp.text, "html.parser")
             )
@@ -134,7 +139,7 @@ class Crawler:
 def process_arguments():
     parser = argparse.ArgumentParser(description=HELP_TEXT)
     parser.add_argument(
-        "--username",
+        "--username", #用户名设置，必填，推荐使用全名，因为是模糊匹配的。
         metavar="Username",
         type=str,
         action="store",
@@ -143,9 +148,9 @@ def process_arguments():
         dest="userName",
     )
     parser.add_argument(
-        "--max-pages",
+        "--max-pages", # 爬取的最大页数，越多越卡，因为没开多线程
         metavar="N",
-        default=10,
+        default=30, # default 30 不然网友发的太多根本爬不到自己发的都顶掉了
         type=int,
         action="store",
         required=False,
@@ -153,7 +158,7 @@ def process_arguments():
         dest="maxPages",
     )
     parser.add_argument(
-        "--verbose",
+        "--verbose", # 是否显示详细信息（废话模式）
         default=False,
         action="store_true",
         help="废话模式",
@@ -165,16 +170,13 @@ def process_arguments():
 
 def main():
     arguments = process_arguments()
-
-    if arguments.isVerbose:
-        print(arguments)
+    print(arguments)
 
     print("🐢爬行中…")
     for url in BASE_URLS:
         print(f"\033[0;33m{url}\033[0m")
         linklist = Crawler(url, arguments).craw()
         if len(linklist) > 0:
-            # green color
             print("\033[0;32m" + str(len(linklist)) + " result(s) found" + "\033[0m")
             for link in linklist:
                 print(link)
@@ -185,7 +187,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
     try:
         main()
     except Exception as e:
