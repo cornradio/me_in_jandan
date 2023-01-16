@@ -1,4 +1,4 @@
-#!/bin/env python3
+
 
 from datetime import datetime
 from random import random
